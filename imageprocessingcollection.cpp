@@ -50,3 +50,9 @@ void ImageProcessingCollection::time_measurement(QString time)
 {
     emit time_measured("Function took: " + time);
 }
+
+void ImageProcessingCollection::scale_image(double factor)
+{
+
+}
+

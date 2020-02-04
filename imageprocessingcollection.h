@@ -15,7 +15,12 @@ public:
     void test_image_slow();
     void bildLaden(std::string path);
     void time_measurement(QString time);
+    void scale_image(double factor);
+private slots:
 
+    void zoomIn();
+    void zoomOut();
+    void normalSize();
 
 public slots:
 
