@@ -44,13 +44,12 @@ void MainWindow::testBildSchnell()
             im_proc.test_image_fast();
 }
 
-void MainWindow::resize(int height, int width, QImage image)
+void MainWindow::resize()
 {
     TIME_THIS
-            height = QInputDialog::getInt(this, "new height", "Resize");
-            width = QInputDialog::getInt(this, "new width", "Resize");
-            im_proc.resize_image(height, width, image);
-
+            int height = QInputDialog::getInt(this, "Resize", "new height");
+            int width = QInputDialog::getInt(this, "Resize", "new width");
+            im_proc.resize_image(height, width, windows[active_window_idx]->get_image());
 }
 void MainWindow::show_new_image(QImage image, QString name)
 {

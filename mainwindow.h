@@ -26,7 +26,7 @@ public slots:
     void invertieren();
     void testBildLangsam();
     void testBildSchnell();
-    void resize(int height, int width, QImage image);
+    void resize();
     void show_new_image(QImage image, QString name);
     void set_active_window(int idx);
 
