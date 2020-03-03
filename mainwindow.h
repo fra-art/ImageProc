@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QInputDialog>
 #include <QImage>
 #include <QStandardPaths>
 #include <imagedisplaymainwindow.h>
@@ -25,6 +26,7 @@ public slots:
     void invertieren();
     void testBildLangsam();
     void testBildSchnell();
+    void resize(int height, int width, QImage image);
     void show_new_image(QImage image, QString name);
     void set_active_window(int idx);
 

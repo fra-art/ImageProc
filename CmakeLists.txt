@@ -1,0 +1,34 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(imageproc LANGUAGES CXX)
+
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt5 COMPONENTS Widgets REQUIRED)
+find_package(OpenCV REQUIRED)
+
+FILE(GLOB IMAGEPROC_SRC
+    main.cpp
+    imagedisplaymainwindow.h
+    imagedisplaymainwindow.cpp
+    imageprocessingcollection.h
+    imageprocessingcollection.cpp
+    mainwindow.h
+    mainwindow.cpp
+    mainwindow.ui
+    timer.h
+    timer.cpp
+    imagedisplaymainwindow.ui
+    resources.qrc
+)
+
+add_executable(imageproc ${IMAGEPROC_SRC})
+
+target_link_libraries(imageproc PRIVATE Qt5::Widgets ${OpenCV_LIBS})

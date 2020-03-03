@@ -35,13 +35,22 @@ void MainWindow::zeitmessung(QString time)
 void MainWindow::testBildLangsam()
 {
     TIME_THIS
-    im_proc.test_image_slow();
+            im_proc.test_image_slow();
 }
 
 void MainWindow::testBildSchnell()
 {
     TIME_THIS
-    im_proc.test_image_fast();
+            im_proc.test_image_fast();
+}
+
+void MainWindow::resize(int height, int width, QImage image)
+{
+    TIME_THIS
+            height = QInputDialog::getInt(this, "new height", "Resize");
+            width = QInputDialog::getInt(this, "new width", "Resize");
+            im_proc.resize_image(height, width, image);
+
 }
 void MainWindow::show_new_image(QImage image, QString name)
 {
@@ -69,11 +78,12 @@ MainWindow::MainWindow(QWidget *parent)
     //connect(ui->actionEnde, SIGNAL(triggered()), this, SLOT(closeAllWindows()));
     connect(ui->actionEnde, &QAction::triggered, qApp, &QApplication::closeAllWindows);
     connect(ui->actionBild_laden, &QAction::triggered,this,&MainWindow::bildLaden);
-    connect(ui->actioninvertieren, &QAction::triggered, this, &MainWindow::invertieren);
+    connect(ui->actionInvertieren, &QAction::triggered, this, &MainWindow::invertieren);
     connect(ui->actionTestbild_langsam, &QAction::triggered, this, &MainWindow::testBildLangsam);
     connect(ui->actionTestbild_schnell, &QAction::triggered, this, &MainWindow::testBildSchnell);
     connect(&im_proc, &ImageProcessingCollection::time_measured, this, &MainWindow::zeitmessung);
     connect(&im_proc, &ImageProcessingCollection::image_finished, this, &MainWindow::show_new_image);
+    connect(ui->actionScaling, &QAction::triggered, this, &MainWindow::resize);
 }
 
 MainWindow::~MainWindow()

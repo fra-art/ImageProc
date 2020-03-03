@@ -43,9 +43,12 @@
     <addaction name="actionTestbild_langsam"/>
     <addaction name="actionTestbild_schnell"/>
     <addaction name="separator"/>
-    <addaction name="actioninvertieren"/>
+    <addaction name="actionInvertieren"/>
+    <addaction name="separator"/>
+    <addaction name="actionScaling"/>
     <addaction name="separator"/>
     <addaction name="actionZeitmessung"/>
+    <addaction name="separator"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -70,7 +73,7 @@
     <string>Testbild (schnell)</string>
    </property>
   </action>
-  <action name="actioninvertieren">
+  <action name="actionInvertieren">
    <property name="text">
     <string>Invertieren</string>
    </property>
@@ -81,6 +84,11 @@
    </property>
    <property name="text">
     <string>Zeitmessung</string>
+   </property>
+  </action>
+  <action name="actionScaling">
+   <property name="text">
+    <string>Vergrößern/Verkleinern</string>
    </property>
   </action>
  </widget>
