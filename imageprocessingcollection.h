@@ -18,13 +18,14 @@ public:
     void bildLaden(std::string path);
     void time_measurement(QString time);
     void resize_image(int height, int width, QImage image);
-private slots:
-
-    //void zoomIn();
-    //void zoomOut();
-    //void normalSize();
-
-public slots:
+    void equalize_histogram(QImage image);
+    void gaussian_blurr(int height, int width, QImage image);
+    void median(int size, QImage image);
+    void dilate(QImage image);
+    void erode(QImage image);
+    void sobel_filter(bool x, bool y, int size, QImage image);
+    void laplacian(QImage image);
+    void canny_filter(QImage image);//noch nicht fertig
 
 signals:
     void image_finished(QImage, QString);

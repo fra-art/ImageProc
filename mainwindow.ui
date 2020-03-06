@@ -26,7 +26,7 @@
      <x>0</x>
      <y>0</y>
      <width>400</width>
-     <height>25</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuDatei">
@@ -40,15 +40,29 @@
     <property name="title">
      <string>Bearbeiten</string>
     </property>
+    <widget class="QMenu" name="menuFilter">
+     <property name="title">
+      <string>Filter</string>
+     </property>
+     <addaction name="actionKantenfilter_Canny"/>
+     <addaction name="actionLaPlace_Operator"/>
+     <addaction name="actionSobelfilter"/>
+     <addaction name="actionGaussfilter"/>
+     <addaction name="actionMedianfilter"/>
+    </widget>
     <addaction name="actionTestbild_langsam"/>
     <addaction name="actionTestbild_schnell"/>
     <addaction name="separator"/>
+    <addaction name="menuFilter"/>
+    <addaction name="separator"/>
     <addaction name="actionInvertieren"/>
+    <addaction name="actionHistogrammausgleich"/>
     <addaction name="separator"/>
     <addaction name="actionScaling"/>
+    <addaction name="actionDilatieren"/>
+    <addaction name="actionErodieren"/>
     <addaction name="separator"/>
     <addaction name="actionZeitmessung"/>
-    <addaction name="separator"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -89,6 +103,46 @@
   <action name="actionScaling">
    <property name="text">
     <string>Skalieren</string>
+   </property>
+  </action>
+  <action name="actionHistogrammausgleich">
+   <property name="text">
+    <string>Histogrammausgleich</string>
+   </property>
+  </action>
+  <action name="actionKantenfilter_Canny">
+   <property name="text">
+    <string>Kantenfilter(Canny)</string>
+   </property>
+  </action>
+  <action name="actionLaPlace_Operator">
+   <property name="text">
+    <string>LaPlace Operator</string>
+   </property>
+  </action>
+  <action name="actionSobelfilter">
+   <property name="text">
+    <string>Sobelfilter</string>
+   </property>
+  </action>
+  <action name="actionGaussfilter">
+   <property name="text">
+    <string>Gaussfilter</string>
+   </property>
+  </action>
+  <action name="actionMedianfilter">
+   <property name="text">
+    <string>Medianfilter</string>
+   </property>
+  </action>
+  <action name="actionDilatieren">
+   <property name="text">
+    <string>Dilatieren</string>
+   </property>
+  </action>
+  <action name="actionErodieren">
+   <property name="text">
+    <string>Erodieren</string>
    </property>
   </action>
  </widget>

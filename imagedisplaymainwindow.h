@@ -47,6 +47,7 @@ public slots:
 
 signals:
     void mouse_moved(int x, int y);
+    void got_rgb(int r, int b, int g);
 
     // QWidget interface
 protected:
@@ -69,8 +70,7 @@ public:
     QImage get_image();
 
 public slots:
-    void update_statusbar_xy(int x, int y);
-    void update_status_bar_rgb(unsigned char r, unsigned char g, unsigned char b);
+    void update_statusbar(int x, int y);
     void update_status_bar_image_type(QImage::Format format);
     void update_image_view(QImage new_image);
 

@@ -76,13 +76,83 @@ void ImageProcessingCollection::resize_image(int height, int width, QImage image
 
 }
 
+void ImageProcessingCollection::equalize_histogram(QImage image)
+{
 
+        cv::Mat src = qimage_to_mat(image);
+        cv::Mat newImage;
 
+        if(src.channels() == 1){
+            cv::equalizeHist( src, newImage );
+        }
+        else{
+            std::vector<cv::Mat> channels;
+            cv::split(src, channels);
+            for(cv::Mat& channel : channels){
+                cv::equalizeHist(channel, channel);
 
+            }
+            cv::merge(channels, newImage);
+        }
+        emit image_finished(mat_to_qimage(newImage), "Equalized");
+}
 
+void ImageProcessingCollection::gaussian_blurr(int height, int width, QImage image)
+{
+     cv::Mat src = qimage_to_mat(image);
+     cv::Mat newImage;
+     cv::Size size(height, width);
+     cv::GaussianBlur(src, newImage, size, 0,0);
+    emit image_finished(mat_to_qimage(newImage), "filtered_gaussian");
 
+}
 
+void ImageProcessingCollection::median(int size, QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::medianBlur(src, newImage, size);
+    emit image_finished(mat_to_qimage(newImage), "filtered_median");
+}
 
+void ImageProcessingCollection::dilate(QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::dilate(src, newImage, cv::Mat(), cv::Point(-1,-1), 2, 1, 1);
+    emit image_finished(mat_to_qimage(newImage), "dilated");
+}
+
+void ImageProcessingCollection::erode(QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::erode(src, newImage, cv::Mat(), cv::Point(-1,-1), 2, 1, 1);
+    emit image_finished(mat_to_qimage(newImage), "eroded");
+}
+
+void ImageProcessingCollection::sobel_filter(bool x, bool y, int size, QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::Sobel(src, newImage, -1, x, y, size);
+    emit image_finished(mat_to_qimage(newImage), "sobel_filtered");
+
+}
+
+void ImageProcessingCollection::laplacian(QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::Laplacian(src, newImage, CV_8UC3, 1, 1, 0, 1);
+    emit image_finished(mat_to_qimage(newImage), "laplacian");
+
+}
+
+void ImageProcessingCollection::canny_filter(QImage image)
+{
+
+}
 
 
 QImage ImageProcessingCollection::mat_to_qimage(cv::Mat image)

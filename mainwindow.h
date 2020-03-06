@@ -7,6 +7,10 @@
 #include <QInputDialog>
 #include <QImage>
 #include <QStandardPaths>
+#include <QLayout>
+#include <QCheckBox>
+#include <QDialogButtonBox>
+#include <QPushButton>
 #include <imagedisplaymainwindow.h>
 #include "imageprocessingcollection.h"
 
@@ -27,6 +31,13 @@ public slots:
     void testBildLangsam();
     void testBildSchnell();
     void resize();
+    void equalize();
+    void gaussian();
+    void median();
+    void dilate();
+    void erode();
+    void sobel();
+    void laplacian();
     void show_new_image(QImage image, QString name);
     void set_active_window(int idx);
 
