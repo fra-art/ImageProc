@@ -21,7 +21,7 @@ void BinariseDialog::update_window()
     scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-
+    //delete scene
 }
 
 void BinariseDialog::set_image(QImage image)
