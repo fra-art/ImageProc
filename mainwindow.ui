@@ -49,6 +49,7 @@
      <addaction name="actionSobelfilter"/>
      <addaction name="actionGaussfilter"/>
      <addaction name="actionMedianfilter"/>
+     <addaction name="actionMittelwertfilter"/>
     </widget>
     <addaction name="actionTestbild_langsam"/>
     <addaction name="actionTestbild_schnell"/>
@@ -63,6 +64,8 @@
     <addaction name="actionErodieren"/>
     <addaction name="separator"/>
     <addaction name="actionZeitmessung"/>
+    <addaction name="separator"/>
+    <addaction name="actionBinarisieren"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -143,6 +146,16 @@
   <action name="actionErodieren">
    <property name="text">
     <string>Erodieren</string>
+   </property>
+  </action>
+  <action name="actionBinarisieren">
+   <property name="text">
+    <string>Binarisieren</string>
+   </property>
+  </action>
+  <action name="actionMittelwertfilter">
+   <property name="text">
+    <string>Mittelwertfilter</string>
    </property>
   </action>
  </widget>

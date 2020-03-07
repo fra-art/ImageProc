@@ -26,6 +26,9 @@ FILE(GLOB IMAGEPROC_SRC
     timer.h
     timer.cpp
     imagedisplaymainwindow.ui
+    binarisedialog.cpp
+    binarisedialog.h
+    binarisedialog.ui
     resources.qrc
 )
 

@@ -112,7 +112,59 @@ void ImageProcessingCollection::median(int size, QImage image)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::medianBlur(src, newImage, size);
-    emit image_finished(mat_to_qimage(newImage), "filtered_median");
+    emit image_finished(mat_to_qimage(newImage), "Median Filter");
+}
+
+void ImageProcessingCollection::mean(QImage image, int size)
+{
+    cv::Mat newImage;
+    cv::Mat src = qimage_to_mat(image);
+    if(size % 2){
+        if(src.type() == CV_8UC1){
+            newImage = mean_single_channel(src, size);
+        }
+        else{
+            std::vector<cv::Mat> channels;
+            cv::split(src, channels);
+            for(auto& channel : channels){
+                channel = mean_single_channel(channel, size);
+            }
+            cv::merge(channels, newImage);
+        }
+    }
+    emit image_finished(mat_to_qimage(newImage), "Mean Filter");
+
+
+
+}
+
+cv::Mat ImageProcessingCollection::mean_single_channel(cv::Mat src, int size)
+{
+    int sum = 0;
+    cv::Mat newImage = cv::Mat::zeros(src.rows, src.cols, CV_8UC1);
+    for(int x = size/2; x < src.cols - (size/2); ++x){
+        for(int y = size/2; y < src.rows - (size/2); ++y){
+            sum = 0;
+            for(int i = -(size/2); i < size/2; ++i){
+                for(int j = -(size/2); j < size/2; ++j){
+                    sum += src.at<unsigned char>(y+j, x+i);
+                }
+            }
+                newImage.at<unsigned char>(y, x) = sum/(size*size);
+            }
+        }
+    return newImage;
+    }
+
+void ImageProcessingCollection::mean_separated(QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+
+   //cv::filter2D(src, newImage, ddepht, kernel, cv::Point(-1,-1), 0, 1);
+
+
+    emit image_finished(mat_to_qimage(newImage), "filtered_seperated_median");
 }
 
 void ImageProcessingCollection::dilate(QImage image)
@@ -149,9 +201,41 @@ void ImageProcessingCollection::laplacian(QImage image)
 
 }
 
-void ImageProcessingCollection::canny_filter(QImage image)
+void ImageProcessingCollection::canny_filter(QImage image, double t1, double t2)
 {
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    cv::Canny(src, newImage, t1, t2, 3, false);
+    emit image_finished(mat_to_qimage(newImage), "canny");
+}
 
+void ImageProcessingCollection::draw_line(cv::Point start, cv::Point end, QImage image)
+{
+    cv::Mat src = qimage_to_mat(image);
+    cv::Mat newImage;
+    int thickness = 2;
+    int lineType = cv::LINE_8;
+    cv::line(src, start, end, cv::Scalar( 0, 0, 0 ), thickness, lineType );
+    emit image_finished(mat_to_qimage(newImage), "line_drawn");
+}
+
+QImage ImageProcessingCollection::binarisieren(QImage image, int schwelle)
+{
+    image.convertTo(QImage::Format_Grayscale8);
+    unsigned char* image_data_ptr = image.bits();
+    for(int i = 0; i < image.width(); ++i){
+        for(int j = 0; j < image.height(); ++j){
+
+        if(*image_data_ptr < schwelle){
+            *image_data_ptr = 0;
+        }
+        else{
+            *image_data_ptr = 255;
+        }
+        image_data_ptr++;
+    }
+    }
+    return image;
 }
 
 

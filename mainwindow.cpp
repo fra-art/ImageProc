@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include "imagedisplaymainwindow.h"
 
 void MainWindow::closeWindows()
 {
@@ -48,10 +48,12 @@ void MainWindow::testBildSchnell()
 
 void MainWindow::resize()
 {
-    TIME_THIS
             int height = QInputDialog::getInt(this, "Resize", "new height");
             int width = QInputDialog::getInt(this, "Resize", "new width");
+            {
+                TIME_THIS
             im_proc.resize_image(height, width, windows[active_window_idx]->get_image());
+            }
 }
 
 void MainWindow::equalize()
@@ -63,14 +65,16 @@ void MainWindow::equalize()
 
 void MainWindow::gaussian()
 {
-    TIME_THIS
             int height = QInputDialog::getInt(this, "Größe des Filters", "Wähle eine ungerade Zahl: ");
             int width = height;
-            if(height % 2){
+            {
+                TIME_THIS
+                if(height % 2){
                 im_proc.gaussian_blurr(height, width, windows[active_window_idx]->get_image());
-            }
-            else{
+                }
+                else{
                 QMessageBox::critical(this, "Error", "Zahl darf nicht gerade sein!");
+                }
             }
 }
 
@@ -86,6 +90,13 @@ void MainWindow::median()
     }
 }
 
+void MainWindow::mean()
+{
+            int size = QInputDialog::getInt(this, "Filtergröße", "Filtergröße her du Sackgesicht");
+            TIME_THIS
+            im_proc.mean(windows[active_window_idx]->get_image(), size);
+}
+
 void MainWindow::dilate()
 {
     TIME_THIS
@@ -96,8 +107,24 @@ void MainWindow::dilate()
 void MainWindow::erode()
 {
     TIME_THIS
-            im_proc.erode(windows[active_window_idx]->get_image());
+    im_proc.erode(windows[active_window_idx]->get_image());
 
+}
+
+
+void MainWindow::laplacian()
+{
+    TIME_THIS
+            im_proc.laplacian(windows[active_window_idx]->get_image());
+}
+
+void MainWindow::canny()
+{
+    double t1 = QInputDialog::getDouble(this, "erster Grenzwert", "Wähle den ersten Grenzwert(0-255): ");
+    double t2 = QInputDialog::getDouble(this, "zweiter Grenzwert", "Wähle den zweiten Grenzwert(0-255): ");
+
+    TIME_THIS
+            im_proc.canny_filter(windows[active_window_idx]->get_image(), t1, t2);
 }
 
 void MainWindow::sobel()
@@ -141,10 +168,17 @@ void MainWindow::sobel()
             sobel_dialog->show();
 }
 
-void MainWindow::laplacian()
+void MainWindow::draw_line()
 {
-    TIME_THIS
-            im_proc.laplacian(windows[active_window_idx]->get_image());
+
+
+    //im_proc.draw_line(cv::Point(TrackingGraphicsViewPixmapItem::mouse_moved(x(),y()), TrackingGraphicsViewPixmapItem::y()), windows[active_window_idx]->get_image());
+}
+
+void MainWindow::binarise()
+{
+    binarise_dialog->set_image(windows[active_window_idx]->get_image());
+    binarise_dialog->open();
 }
 void MainWindow::show_new_image(QImage image, QString name)
 {
@@ -159,13 +193,13 @@ void MainWindow::set_active_window(int idx)
 {
     active_window_idx = idx;
 }
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
+    ,binarise_dialog(new BinariseDialog(this))
 {
     ui->setupUi(this);
-
-
     setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
     setWindowIcon(QIcon(":/image_proc.png"));
 
@@ -181,11 +215,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->actionHistogrammausgleich, &QAction::triggered, this, &MainWindow::equalize);
     connect(ui->actionGaussfilter, &QAction::triggered, this, &MainWindow::gaussian);
     connect(ui->actionMedianfilter, &QAction::triggered, this, &MainWindow::median);
+    connect(ui->actionMittelwertfilter, &QAction::triggered, this, &MainWindow::mean);
     connect(ui->actionDilatieren, &QAction::triggered, this, &MainWindow::dilate);
     connect(ui->actionErodieren, &QAction::triggered, this, &MainWindow::erode);
     connect(ui->actionLaPlace_Operator, &QAction::triggered, this, &MainWindow::laplacian);
+    connect(ui->actionKantenfilter_Canny, &QAction::triggered, this, &MainWindow::canny);
     connect(ui->actionSobelfilter, &QAction::triggered, this, &MainWindow::sobel);
-
+    connect(binarise_dialog, &BinariseDialog::finished_image, this, &MainWindow::show_new_image);
+    connect(ui->actionBinarisieren, &QAction::triggered, this, &MainWindow::binarise);
+    connect(binarise_dialog, &BinariseDialog::accepted, binarise_dialog, &BinariseDialog::emit_image_finished);
 }
 
 MainWindow::~MainWindow()

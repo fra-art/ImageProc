@@ -11,6 +11,7 @@
 #include <QCheckBox>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include "binarisedialog.h"
 #include <imagedisplaymainwindow.h>
 #include "imageprocessingcollection.h"
 
@@ -34,10 +35,14 @@ public slots:
     void equalize();
     void gaussian();
     void median();
+    void mean();
     void dilate();
     void erode();
-    void sobel();
     void laplacian();
+    void canny();
+    void sobel();
+    void draw_line();
+    void binarise();
     void show_new_image(QImage image, QString name);
     void set_active_window(int idx);
 
@@ -50,6 +55,7 @@ private:
     Ui::MainWindow *ui;
     ImageProcessingCollection im_proc;
     ImageDisplayMainWindow* activeWindow;
+    BinariseDialog* binarise_dialog;
     std::vector<ImageDisplayMainWindow*> windows;
     int active_window_idx;
 };
