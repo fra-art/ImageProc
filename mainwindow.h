@@ -21,8 +21,6 @@ QT_END_NAMESPACE
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
-
 public slots:
 
     void closeWindows ();
@@ -42,7 +40,7 @@ public slots:
     void laplacian();
     void canny();
     void sobel();
-    void draw_line();
+    //void draw_line();
     void binarise();
     void grauwert();
     void rotate();
