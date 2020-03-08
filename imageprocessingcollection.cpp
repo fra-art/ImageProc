@@ -53,7 +53,7 @@ void ImageProcessingCollection::bildLaden(std::string path)
 {
     QImage loaded_image;
     loaded_image.load(path.c_str());
-    loaded_image.convertTo(QImage::Format_RGB888);
+    loaded_image = loaded_image.convertToFormat(QImage::Format_RGB888);
     emit image_finished(loaded_image, path.c_str());
 }
 
@@ -273,13 +273,13 @@ void ImageProcessingCollection::rotate(QImage image, int angle)
 
 void ImageProcessingCollection::convert_to_gray_value(QImage image)
 {
-    image.convertTo(QImage::Format_Grayscale8);
+    image = image.convertToFormat(QImage::Format_Grayscale8);
     emit image_finished(image, "Konvertiert zu 8-Bit Grauwertbild");
 }
 
 QImage ImageProcessingCollection::binarisieren(QImage image, int schwelle)
 {
-    image.convertTo(QImage::Format_Grayscale8);
+    image = image.convertToFormat(QImage::Format_Grayscale8);
     unsigned char* image_data_ptr = image.bits();
     for(int i = 0; i < image.width(); ++i){
         for(int j = 0; j < image.height(); ++j){

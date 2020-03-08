@@ -55,11 +55,6 @@ void ImageDisplayMainWindow::update_statusbar(int x, int y)
     rgb_label->setText(rgb_str);
 }
 
-void ImageDisplayMainWindow::update_status_bar_image_type(QImage::Format format)
-{
-
-}
-
 void ImageDisplayMainWindow::update_image_view(QImage new_image)
 {
     setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);

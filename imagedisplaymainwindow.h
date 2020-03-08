@@ -71,7 +71,6 @@ public:
 
 public slots:
     void update_statusbar(int x, int y);
-    void update_status_bar_image_type(QImage::Format format);
     void update_image_view(QImage new_image);
 
 signals:
