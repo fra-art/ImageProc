@@ -50,9 +50,12 @@ void MainWindow::resize()
 {
             int height = QInputDialog::getInt(this, "Skalieren", "neue Höhe des Bildes:");
             int width = QInputDialog::getInt(this, "Skalieren", "neue Breite des Bildes:");
-            {
+            if(height < 0 || width < 0){
+                QMessageBox::critical(this, "Error", "Nur positive Zahlen möglich!");
+            }
+            else{
                 TIME_THIS
-            im_proc.resize_image(height, width, windows[active_window_idx]->get_image());
+                im_proc.resize_image(height, width, windows[active_window_idx]->get_image());
             }
 }
 

@@ -17,7 +17,7 @@ void ImageProcessingCollection::invert_image(QImage image)
 
     }
 
-    emit image_finished(mat_to_qimage(image_to_invert), "Inverted");
+    emit image_finished(mat_to_qimage(image_to_invert), "Invertiert");
 
 }
 
@@ -59,7 +59,7 @@ void ImageProcessingCollection::bildLaden(std::string path)
 
 void ImageProcessingCollection::time_measurement(QString time)
 {
-    emit time_measured("Function took: " + time);
+    emit time_measured("Funktion braucht: " + time);
 }
 
 void ImageProcessingCollection::resize_image(int height, int width, QImage image)
@@ -69,7 +69,7 @@ void ImageProcessingCollection::resize_image(int height, int width, QImage image
     cv::Mat image_to_resize = qimage_to_mat(image);
     cv::resize(image_to_resize, newImage, size);
 
-    emit image_finished(mat_to_qimage(newImage), "Resized");
+    emit image_finished(mat_to_qimage(newImage), "Skaliert");
 
 }
 
@@ -91,7 +91,7 @@ void ImageProcessingCollection::equalize_histogram(QImage image)
             }
             cv::merge(channels, newImage);
         }
-        emit image_finished(mat_to_qimage(newImage), "Equalized");
+        emit image_finished(mat_to_qimage(newImage), "Histogrammausgleich");
 }
 
 void ImageProcessingCollection::gaussian_blurr(int height, int width, double sigma, QImage image)
@@ -100,7 +100,7 @@ void ImageProcessingCollection::gaussian_blurr(int height, int width, double sig
      cv::Mat newImage;
      cv::Size size(height, width);
      cv::GaussianBlur(src, newImage, size, sigma);
-    emit image_finished(mat_to_qimage(newImage), "filtered_gaussian");
+    emit image_finished(mat_to_qimage(newImage), "Gaussfilter");
 
 }
 
@@ -109,7 +109,7 @@ void ImageProcessingCollection::median(int size, QImage image)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::medianBlur(src, newImage, size);
-    emit image_finished(mat_to_qimage(newImage), "Median Filter");
+    emit image_finished(mat_to_qimage(newImage), "Medianfilter");
 }
 
 void ImageProcessingCollection::mean(QImage image, int size)
@@ -129,7 +129,7 @@ void ImageProcessingCollection::mean(QImage image, int size)
             cv::merge(channels, newImage);
         }
     }
-    emit image_finished(mat_to_qimage(newImage), "Mean Filter");
+    emit image_finished(mat_to_qimage(newImage), "Mittelwertfilter");
 
 
 
@@ -159,7 +159,7 @@ void ImageProcessingCollection::mean_separated(QImage image, int width, int heig
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::boxFilter(src, newImage, -1, size, cv::Point(-1,-1));
-    emit image_finished(mat_to_qimage(newImage), "filtered_seperated_median");
+    emit image_finished(mat_to_qimage(newImage), "separierter Medianfilter");
 }
 
 void ImageProcessingCollection::dilate(QImage image)
@@ -167,7 +167,7 @@ void ImageProcessingCollection::dilate(QImage image)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::dilate(src, newImage, cv::Mat(), cv::Point(-1,-1), 2, 1, 1);
-    emit image_finished(mat_to_qimage(newImage), "dilated");
+    emit image_finished(mat_to_qimage(newImage), "dilatiert");
 }
 
 void ImageProcessingCollection::erode(QImage image)
@@ -175,7 +175,7 @@ void ImageProcessingCollection::erode(QImage image)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::erode(src, newImage, cv::Mat(), cv::Point(-1,-1), 2, 1, 1);
-    emit image_finished(mat_to_qimage(newImage), "eroded");
+    emit image_finished(mat_to_qimage(newImage), "erodiert");
 }
 
 void ImageProcessingCollection::sobel_filter(bool x, bool y, int size, QImage image)
@@ -183,7 +183,7 @@ void ImageProcessingCollection::sobel_filter(bool x, bool y, int size, QImage im
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::Sobel(src, newImage, -1, x, y, size);
-    emit image_finished(mat_to_qimage(newImage), "sobel_filtered");
+    emit image_finished(mat_to_qimage(newImage), "Sobelfilter");
 
 }
 
@@ -192,7 +192,7 @@ void ImageProcessingCollection::laplacian(QImage image)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::Laplacian(src, newImage, CV_8UC3, 1, 1, 0, 1);
-    emit image_finished(mat_to_qimage(newImage), "laplacian");
+    emit image_finished(mat_to_qimage(newImage), "La Place Filter");
 
 }
 
@@ -201,7 +201,7 @@ void ImageProcessingCollection::canny_filter(QImage image, double t1, double t2)
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
     cv::Canny(src, newImage, t1, t2, 3, false);
-    emit image_finished(mat_to_qimage(newImage), "canny");
+    emit image_finished(mat_to_qimage(newImage), "Canny Kantenfilter");
 }
 
 #if 0
