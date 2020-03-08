@@ -23,14 +23,11 @@ void ImageProcessingCollection::invert_image(QImage image)
 
 void ImageProcessingCollection::test_image_fast()
 {
-    //QImage newImage(512, 512, QImage::Format_Grayscale8);
     cv::Mat newImage(512, 512, CV_8UC1);
 
     unsigned char* pixel = newImage.data;
     for(int y = 0; y < newImage.rows; y++){
-        //line = newImage.scanLine(y);
         for(int x = 0; x < newImage.cols; x++){
-            //line[x] = static_cast<unsigned char>(y/2);
             *pixel = static_cast<unsigned char>(y / 2);
             pixel++;
         }
@@ -97,12 +94,12 @@ void ImageProcessingCollection::equalize_histogram(QImage image)
         emit image_finished(mat_to_qimage(newImage), "Equalized");
 }
 
-void ImageProcessingCollection::gaussian_blurr(int height, int width, QImage image)
+void ImageProcessingCollection::gaussian_blurr(int height, int width, double sigma, QImage image)
 {
      cv::Mat src = qimage_to_mat(image);
      cv::Mat newImage;
      cv::Size size(height, width);
-     cv::GaussianBlur(src, newImage, size, 0,0);
+     cv::GaussianBlur(src, newImage, size, sigma);
     emit image_finished(mat_to_qimage(newImage), "filtered_gaussian");
 
 }
@@ -156,14 +153,12 @@ cv::Mat ImageProcessingCollection::mean_single_channel(cv::Mat src, int size)
     return newImage;
     }
 
-void ImageProcessingCollection::mean_separated(QImage image)
+void ImageProcessingCollection::mean_separated(QImage image, int width, int height)
 {
+    cv::Size size{width, height};
     cv::Mat src = qimage_to_mat(image);
     cv::Mat newImage;
-
-   //cv::filter2D(src, newImage, ddepht, kernel, cv::Point(-1,-1), 0, 1);
-
-
+    cv::boxFilter(src, newImage, -1, size, cv::Point(-1,-1));
     emit image_finished(mat_to_qimage(newImage), "filtered_seperated_median");
 }
 
@@ -209,6 +204,7 @@ void ImageProcessingCollection::canny_filter(QImage image, double t1, double t2)
     emit image_finished(mat_to_qimage(newImage), "canny");
 }
 
+#if 0
 void ImageProcessingCollection::draw_line(cv::Point start, cv::Point end, QImage image)
 {
     cv::Mat src = qimage_to_mat(image);
@@ -217,6 +213,68 @@ void ImageProcessingCollection::draw_line(cv::Point start, cv::Point end, QImage
     int lineType = cv::LINE_8;
     cv::line(src, start, end, cv::Scalar( 0, 0, 0 ), thickness, lineType );
     emit image_finished(mat_to_qimage(newImage), "line_drawn");
+}
+#endif
+void ImageProcessingCollection::histogram(QImage image)
+{
+    //code größtenteils aus opencv documentation
+    cv::Mat src = qimage_to_mat(image);
+    int hist_w = 512, hist_h = 400;
+    float range[] = { 0, 256 };
+    const float* histRange = { range };
+    int histSize = 256;
+    cv::Mat histImage( hist_h, hist_w, CV_8UC3, cv::Scalar( 0,0,0) );
+    int bin_w = cvRound( (double) hist_w/histSize );
+    if(src.type() == CV_8UC1){
+        cv::Mat gray_hist;
+        calcHist( &src, 1, 0, cv::Mat(), gray_hist, 1, &histSize, &histRange);
+        normalize(gray_hist, gray_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
+        for( int i = 1; i < histSize; i++ )
+        {
+            line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(gray_hist.at<float>(i-1)) ),
+                  cv::Point( bin_w*(i), hist_h - cvRound(gray_hist.at<float>(i)) ),
+                  cv::Scalar( 255, 255, 255), 2, 8, 0  );
+        }
+
+        emit image_finished(mat_to_qimage(histImage), "Histogramm");
+        return;
+    }
+    std::vector<cv::Mat> bgr_planes;
+    split( src, bgr_planes );
+        cv::Mat b_hist, g_hist, r_hist;
+        calcHist( &bgr_planes[0], 1, 0, cv::Mat(), b_hist, 1, &histSize, &histRange);
+        calcHist( &bgr_planes[1], 1, 0, cv::Mat(), g_hist, 1, &histSize, &histRange);
+        calcHist( &bgr_planes[2], 1, 0, cv::Mat(), r_hist, 1, &histSize, &histRange);
+        normalize(b_hist, b_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
+        normalize(g_hist, g_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
+        normalize(r_hist, r_hist, 0, histImage.rows, cv::NORM_MINMAX, -1, cv::Mat() );
+        for( int i = 1; i < histSize; i++ )
+        {
+            line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(b_hist.at<float>(i-1)) ),
+                  cv::Point( bin_w*(i), hist_h - cvRound(b_hist.at<float>(i)) ),
+                  cv::Scalar( 255, 0, 0), 2, 8, 0  );
+            line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(g_hist.at<float>(i-1)) ),
+                  cv::Point( bin_w*(i), hist_h - cvRound(g_hist.at<float>(i)) ),
+                  cv::Scalar( 0, 255, 0), 2, 8, 0  );
+            line( histImage, cv::Point( bin_w*(i-1), hist_h - cvRound(r_hist.at<float>(i-1)) ),
+                  cv::Point( bin_w*(i), hist_h - cvRound(r_hist.at<float>(i)) ),
+                  cv::Scalar( 0, 0, 255), 2, 8, 0  );
+        }
+        emit image_finished(mat_to_qimage(histImage), "Histogramm");
+}
+
+void ImageProcessingCollection::rotate(QImage image, int angle)
+{
+    QMatrix rot_mat;
+    rot_mat.rotate(angle);
+    image = image.transformed(rot_mat);
+    emit image_finished(image, "Rotiert um " + QString::number(angle) + "°");
+}
+
+void ImageProcessingCollection::convert_to_gray_value(QImage image)
+{
+    image.convertTo(QImage::Format_Grayscale8);
+    emit image_finished(image, "Konvertiert zu 8-Bit Grauwertbild");
 }
 
 QImage ImageProcessingCollection::binarisieren(QImage image, int schwelle)

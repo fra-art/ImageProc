@@ -19,7 +19,6 @@ ui->graphicsView->setScene(&scene);
 setMouseTracking(true);
 init_statusbar();
 connect(tracking_pixmap, &TrackingGraphicsViewPixmapItem::mouse_moved, this, &ImageDisplayMainWindow::update_statusbar);
-//connect(&scene, SIGNAL(mouseMove(int, int)), this, SLOT(mouseMoved(int, int)));
 }
 
 ImageDisplayMainWindow::~ImageDisplayMainWindow()

@@ -19,19 +19,21 @@ public:
     void time_measurement(QString time);
     void resize_image(int height, int width, QImage image);
     void equalize_histogram(QImage image);
-    void gaussian_blurr(int height, int width, QImage image);
+    void gaussian_blurr(int height, int width, double sigma, QImage image);
     void median(int size, QImage image);
-    void mean(QImage image, int size);//mit opencv
+    void mean(QImage image, int size);
     cv::Mat mean_single_channel(cv::Mat image, int size);
-    void mean_separated(QImage image);
+    void mean_separated(QImage image, int width, int height);
     void dilate(QImage image);
     void erode(QImage image);
     void sobel_filter(bool x, bool y, int size, QImage image);
     void laplacian(QImage image);
     void canny_filter(QImage image, double t1, double t2);
-    void draw_line(cv::Point start, cv::Point end, QImage image);//
-    void histogram(QImage image);//
-    static QImage binarisieren(QImage image, int schwelle);//
+    //void draw_line(cv::Point start, cv::Point end, QImage image); -> nicht fertig implementiert worden
+    void histogram(QImage image);
+    void rotate(QImage image, int angle);
+    void convert_to_gray_value(QImage image);
+    static QImage binarisieren(QImage image, int schwelle);
 
 signals:
     void image_finished(QImage, QString);

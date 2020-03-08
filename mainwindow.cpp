@@ -48,8 +48,8 @@ void MainWindow::testBildSchnell()
 
 void MainWindow::resize()
 {
-            int height = QInputDialog::getInt(this, "Resize", "new height");
-            int width = QInputDialog::getInt(this, "Resize", "new width");
+            int height = QInputDialog::getInt(this, "Skalieren", "neue Höhe des Bildes:");
+            int width = QInputDialog::getInt(this, "Skalieren", "neue Breite des Bildes:");
             {
                 TIME_THIS
             im_proc.resize_image(height, width, windows[active_window_idx]->get_image());
@@ -66,11 +66,12 @@ void MainWindow::equalize()
 void MainWindow::gaussian()
 {
             int height = QInputDialog::getInt(this, "Größe des Filters", "Wähle eine ungerade Zahl: ");
+            double sigma = QInputDialog::getDouble(this, "Sigmawert", "Bitte Sigmawert angeben: ", 0);
             int width = height;
             {
                 TIME_THIS
                 if(height % 2){
-                im_proc.gaussian_blurr(height, width, windows[active_window_idx]->get_image());
+                im_proc.gaussian_blurr(height, width, sigma, windows[active_window_idx]->get_image());
                 }
                 else{
                 QMessageBox::critical(this, "Error", "Zahl darf nicht gerade sein!");
@@ -92,9 +93,24 @@ void MainWindow::median()
 
 void MainWindow::mean()
 {
-            int size = QInputDialog::getInt(this, "Filtergröße", "Filtergröße her du Sackgesicht");
+            int size = QInputDialog::getInt(this, "Filtergröße", "Bitte Filtergröße angeben: ");
             TIME_THIS
-            im_proc.mean(windows[active_window_idx]->get_image(), size);
+                    im_proc.mean(windows[active_window_idx]->get_image(), size);
+}
+
+void MainWindow::mean_seperated()
+{
+    int height = QInputDialog::getInt(this, "Filtergröße", "Wähle eine ungerade Zahl: ");
+    int width = height;
+    if(height % 2){
+        TIME_THIS{
+        im_proc.mean_separated(windows[active_window_idx]->get_image(), width, height);
+        }
+    }
+    else{
+        QMessageBox::critical(this, "Error", "Zahl darf nicht gerade sein!");
+    }
+
 }
 
 void MainWindow::dilate()
@@ -167,18 +183,39 @@ void MainWindow::sobel()
             });
             sobel_dialog->show();
 }
-
+#if 0
 void MainWindow::draw_line()
 {
 
 
-    //im_proc.draw_line(cv::Point(TrackingGraphicsViewPixmapItem::mouse_moved(x(),y()), TrackingGraphicsViewPixmapItem::y()), windows[active_window_idx]->get_image());
+    im_proc.draw_line(cv::Point(TrackingGraphicsViewPixmapItem::mouse_moved(x(),y()), TrackingGraphicsViewPixmapItem::y()), windows[active_window_idx]->get_image());
 }
+#endif
 
 void MainWindow::binarise()
 {
     binarise_dialog->set_image(windows[active_window_idx]->get_image());
     binarise_dialog->open();
+}
+
+void MainWindow::grauwert()
+{
+    TIME_THIS
+            im_proc.convert_to_gray_value(windows[active_window_idx]->get_image());
+}
+
+void MainWindow::rotate()
+{
+    int angle = QInputDialog::getInt(this, "Rotationswinkel", "Wähle den gewünschten Rotationswinkel: ");
+    TIME_THIS
+            im_proc.rotate(windows[active_window_idx]->get_image(), angle);
+
+}
+
+void MainWindow::histogram()
+{
+    im_proc.histogram(windows[active_window_idx]->get_image());
+
 }
 void MainWindow::show_new_image(QImage image, QString name)
 {
@@ -203,7 +240,6 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowFlag(Qt::MSWindowsFixedSizeDialogHint);
     setWindowIcon(QIcon(":/image_proc.png"));
 
-    //connect(ui->actionEnde, SIGNAL(triggered()), this, SLOT(closeAllWindows()));
     connect(ui->actionEnde, &QAction::triggered, qApp, &QApplication::closeAllWindows);
     connect(ui->actionBild_laden, &QAction::triggered,this,&MainWindow::bildLaden);
     connect(ui->actionInvertieren, &QAction::triggered, this, &MainWindow::invertieren);
@@ -224,6 +260,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(binarise_dialog, &BinariseDialog::finished_image, this, &MainWindow::show_new_image);
     connect(ui->actionBinarisieren, &QAction::triggered, this, &MainWindow::binarise);
     connect(binarise_dialog, &BinariseDialog::accepted, binarise_dialog, &BinariseDialog::emit_image_finished);
+    connect(ui->actionFarbbild_zu_Grauwertbild, &QAction::triggered, this, &MainWindow::grauwert);
+    connect(ui->actionRotieren, &QAction::triggered, this, &MainWindow::rotate);
+    connect(ui->actionHistogramm, &QAction::triggered, this, &MainWindow::histogram);
+    connect(ui->actionseparierter_Mittelwertfilter, &QAction::triggered, this, &MainWindow::mean_seperated);
 }
 
 MainWindow::~MainWindow()

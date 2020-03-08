@@ -16,12 +16,14 @@ BinariseDialog::~BinariseDialog()
 
 void BinariseDialog::update_window()
 {
+    if(scene){
+        delete scene;
+    }
     auto pixmap = QPixmap::fromImage(m_image_bin);
-    auto scene = new QGraphicsScene();
+    scene = new QGraphicsScene();
     scene->addPixmap(pixmap);
     ui->graphicsView->setScene(scene);
     ui->graphicsView->fitInView(scene->itemsBoundingRect(), Qt::KeepAspectRatio);
-    //delete scene
 }
 
 void BinariseDialog::set_image(QImage image)

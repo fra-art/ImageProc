@@ -2,6 +2,7 @@
 #define BINARISEDIALOG_H
 
 #include <QDialog>
+#include <QGraphicsView>
 #include <imageprocessingcollection.h>
 namespace Ui {
 class BinariseDialog;
@@ -12,6 +13,7 @@ class BinariseDialog : public QDialog
     Q_OBJECT
     QImage m_image_src;
     QImage m_image_bin;
+    QGraphicsScene* scene = nullptr;
 
 public:
     explicit BinariseDialog(QWidget *parent = nullptr);

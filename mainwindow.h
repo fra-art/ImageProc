@@ -36,6 +36,7 @@ public slots:
     void gaussian();
     void median();
     void mean();
+    void mean_seperated();
     void dilate();
     void erode();
     void laplacian();
@@ -43,6 +44,9 @@ public slots:
     void sobel();
     void draw_line();
     void binarise();
+    void grauwert();
+    void rotate();
+    void histogram();
     void show_new_image(QImage image, QString name);
     void set_active_window(int idx);
 

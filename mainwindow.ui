@@ -50,6 +50,7 @@
      <addaction name="actionGaussfilter"/>
      <addaction name="actionMedianfilter"/>
      <addaction name="actionMittelwertfilter"/>
+     <addaction name="actionseparierter_Mittelwertfilter"/>
     </widget>
     <addaction name="actionTestbild_langsam"/>
     <addaction name="actionTestbild_schnell"/>
@@ -60,12 +61,15 @@
     <addaction name="actionHistogrammausgleich"/>
     <addaction name="separator"/>
     <addaction name="actionScaling"/>
+    <addaction name="actionRotieren"/>
     <addaction name="actionDilatieren"/>
     <addaction name="actionErodieren"/>
     <addaction name="separator"/>
     <addaction name="actionZeitmessung"/>
     <addaction name="separator"/>
     <addaction name="actionBinarisieren"/>
+    <addaction name="actionHistogramm"/>
+    <addaction name="actionFarbbild_zu_Grauwertbild"/>
    </widget>
    <addaction name="menuDatei"/>
    <addaction name="menuBearbeiten"/>
@@ -156,6 +160,26 @@
   <action name="actionMittelwertfilter">
    <property name="text">
     <string>Mittelwertfilter</string>
+   </property>
+  </action>
+  <action name="actionFarbbild_zu_Grauwertbild">
+   <property name="text">
+    <string>Farbbild zu Grauwertbild</string>
+   </property>
+  </action>
+  <action name="actionRotieren">
+   <property name="text">
+    <string>Rotieren</string>
+   </property>
+  </action>
+  <action name="actionHistogramm">
+   <property name="text">
+    <string>Histogramm</string>
+   </property>
+  </action>
+  <action name="actionseparierter_Mittelwertfilter">
+   <property name="text">
+    <string>separierter Mittelwertfilter</string>
    </property>
   </action>
  </widget>

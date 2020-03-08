@@ -21,4 +21,4 @@ public slots:
 };
 
 #define TIME_THIS Timer timer; connect(&timer, &Timer::measured_time, this, &MainWindow::zeitmessung);
-#endif // TIMER_H
+#endif
