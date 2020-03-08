@@ -29,8 +29,10 @@ void ImageDisplayMainWindow::init_statusbar()
 {
     xy_label = new QLabel(this);
     rgb_label = new QLabel(this);
+    image_type = new QLabel(this);
     ui->statusbar->addWidget(xy_label);
     ui->statusbar->addWidget(rgb_label);
+    ui->statusbar->addPermanentWidget(image_type);
 }
 
 QImage ImageDisplayMainWindow::get_image()
@@ -53,6 +55,7 @@ void ImageDisplayMainWindow::update_statusbar(int x, int y)
     QString blue =  "<font COLOR=#0000FF> B: " + QString::number(b);
     QString rgb_str = red + green + blue;
     rgb_label->setText(rgb_str);
+    image_type->setText("QImage Format: " + QString::number(image.format()));
 }
 
 void ImageDisplayMainWindow::update_image_view(QImage new_image)
@@ -67,7 +70,6 @@ void ImageDisplayMainWindow::update_image_view(QImage new_image)
     tracking_pixmap = new TrackingGraphicsViewPixmapItem(pixmap);
     scene.addItem(tracking_pixmap);
     ui->graphicsView->fitInView(scene.itemsBoundingRect(),Qt::KeepAspectRatio);
-    update_status_bar_image_type(new_image.format());
 }
 
 void ImageDisplayMainWindow::mousePressEvent(QMouseEvent *event)
